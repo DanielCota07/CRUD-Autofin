@@ -16,6 +16,7 @@ export class SellService {
 
   createSell(sell: any) {
     console.log('Sell created', sell);
+    return this.http.post(this.url, sell);
   }
 
 }   

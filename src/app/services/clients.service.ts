@@ -15,7 +15,8 @@ export class ClientsService {
   }
 
   createClient(client: any) {
-    console.log('Product created', client);
+    console.log('Client created', client);
+    return this.http.post(this.url, client);
   }
 
 }

@@ -3,6 +3,7 @@
     <div class="button-container">
         <p-button (click)="showAddSell()" icon="pi pi-dollar" label="Nueva Venta"></p-button>
         <p-button (click)="showAddProduct()" icon="pi pi-box" label="Nuevo Producto"></p-button>
+        <p-button (click)="showAddClient()" icon="pi pi-user" label="Nuevo Cliente"></p-button>
     </div>
     <div class="panels-container">
         <p-panel header="Clientes" [toggleable]="true" class="panel">
@@ -28,7 +29,7 @@
         </div>
         <div class="form-group">
             <label for="productPrice">Precio del Producto:</label>
-            <input id="productPrice" class="input-field" type="number" pInputText />
+            <input id="productPrice" class="input-field" type="number" />
         </div>
         <div class="button-group">
             <p-button (click)="addProduct()">Aceptar</p-button>
@@ -41,14 +42,31 @@
     <div class="dialog-content">
         <div class="form-group">
             <label for="clientName">Cliente:</label>
-            <p-dropdown [options]="clientsList" [(ngModel)]="selectedClient" optionLabel="name" [showClear]="true" placeholder="Selecciona al cliente"></p-dropdown>
+            <p-dropdown [options]="clientsList" [(ngModel)]="selectedClient" optionLabel="name" [showClear]="true" placeholder="Selecciona un cliente"></p-dropdown>
         </div>
         <div class="form-group">
-            <label for="productPrice">Total:</label>
-            <input id="clientTotal" class="input-field" type="number" pInputText />
+            <label for="clientProduct">Producto:</label>
+            <p-dropdown [options]="productsList" [(ngModel)]="selectedProduct" optionLabel="name" [showClear]="true" placeholder="Selecciona un producto"></p-dropdown>
+        </div>
+        <div class="form-group">
+            <label for="productPrice">Cantidad:</label>
+            <input id="clientCantidad" class="input-field" type="number" pInputText />
         </div>
         <div class="button-group">
             <p-button (click)="addSell()">Aceptar</p-button>
+            <p-button  (click)="closeDialog()">Cancelar</p-button>
+        </div>
+    </div>
+</p-dialog>
+
+<p-dialog [(visible)]="showAddClientBool">
+    <div class="dialog-content">
+        <div class="form-group">
+            <label for="clientName">Nombre del Cliente:</label>
+            <input pInputText id="clientName" class="input-field" type="text" pInputText />
+        </div>
+        <div class="button-group">
+            <p-button (click)="addClient()">Aceptar</p-button>
             <p-button  (click)="closeDialog()">Cancelar</p-button>
         </div>
     </div>

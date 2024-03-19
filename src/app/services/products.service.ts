@@ -20,6 +20,8 @@ export class ProductsService {
 
   createProduct(product: any) {
     console.log('Product created', product);
+    console.log('this.url', this.url);
+    return this.http.post(this.url, product);
   }
 
   updateProduct(product: any) {

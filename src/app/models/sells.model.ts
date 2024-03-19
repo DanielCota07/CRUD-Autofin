@@ -11,14 +11,14 @@ export interface Product {
 
 export interface Sell {
     id: number;
-    clientId: Client;
+    client: number;
     total: number;
 }
 
 export interface SellDetail {
     id: number;
-    sellId: Sell;
-    productId: Product;
+    sell: number;
+    product: number;
     quantity: number;
     total: number;
 }

@@ -10,6 +10,12 @@ interface ClientInterface {
   id: number;
   name: string;
 }
+
+interface ProductInterface {
+  id: number;
+  name: string;
+  price: number;
+}
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -26,13 +32,18 @@ export class AppComponent {
   data1: any[] = [];
   headers2: string[] = ['ID', 'Name', 'Price', 'Options'];
   data2: any[] = [];
-  headers3: string[] = ['ID', 'ClientId', 'Total'];
+  headers3: string[] = ['ID', 'Client', 'Total'];
   data3: any[] = [];
-  headers4: string[] = ['ID', 'SellId', 'ProductId', 'Price', 'Quantity', 'Total'];
+  headers4: string[] = ['ID', 'Sell', 'Product', 'Price', 'Quantity', 'Total'];
   data4: any[] = [];
 
   clientsList: ClientInterface[] | undefined;
   selectedClient: ClientInterface | undefined;
+  productsList: ProductInterface[] | undefined;
+  selectedProduct: ProductInterface | undefined;
+  showAddProductBool: boolean = false;
+  showAddSellBool: boolean = false;
+  showAddClientBool: boolean = false;
 
   constructor(
     private productsService: ProductsService, 
@@ -46,6 +57,40 @@ export class AppComponent {
       this.products = result;
       console.log("Products", this.products);
       this.data2 = this.products;
+      this.productsList = this.products.map((product) => {
+        return { id: product.id, name: product.name, price: product.price };
+      });
+    });
+    this.clientsService.getClients().subscribe((result: any) => {
+      this.clients = result;
+      console.log("Clients", this.clients);
+      this.data1 = this.clients;
+      this.clientsList = this.clients.map((client) => {
+        return { id: client.id, name: client.name };
+      });
+    });
+    this.sellService.getSells().subscribe((result: any) => {
+      this.sells = result;
+      console.log("Sells", this.sells);
+      this.data3 = this.sells;
+      console.log("Data3", this.data3);
+      
+    });
+    this.sellDetailsService.getSellDetails().subscribe((result: any) => {
+      this.sellDetails = result;
+      console.log("SellDetails", this.sellDetails);
+      this.data4 = this.sellDetails;
+    });
+  }
+
+  reloadTables() {
+    this.productsService.getProducts().subscribe((result: any) => {
+      this.products = result;
+      console.log("Products", this.products);
+      this.data2 = this.products;
+      this.productsList = this.products.map((product) => {
+        return { id: product.id, name: product.name, price: product.price };
+      });
     });
     this.clientsService.getClients().subscribe((result: any) => {
       this.clients = result;
@@ -67,10 +112,6 @@ export class AppComponent {
     });
   }
 
-
-  showAddProductBool: boolean = false;
-  showAddSellBool: boolean = false;
-
   showAddProduct() {
     this.showAddProductBool = true;
   }
@@ -79,22 +120,86 @@ export class AppComponent {
     this.showAddSellBool = true;
   }
 
+  showAddClient() {
+    this.showAddClientBool = true;
+  }
+
   addProduct() {
     let productName = (document.getElementById('productName') as HTMLInputElement).value;
-    let productPrice = (document.getElementById('productPrice') as HTMLInputElement).value;
-    console.log(productName);
-    console.log(productPrice);
+    let productPriceString = (document.getElementById('productPrice') as HTMLInputElement).value;
+    let productPrice = parseFloat(productPriceString);
+    let product = {
+      name: productName,
+      price: productPrice
+    }
+    this.productsService.createProduct(product).subscribe((result: any) => {
+      console.log("Product created", result);
+      this.products.push(result);
+      this.data2 = this.products;
+      this.reloadTables();
+      (document.getElementById('productName') as HTMLInputElement).value = '';
+      (document.getElementById('productPrice') as HTMLInputElement).value = '';
+      this.closeDialog();
+    });
   }
 
   addSell() {
     let clientSelected = this.selectedClient
-    let total = (document.getElementById('clientTotal') as HTMLInputElement).value;
-    console.log(clientSelected);
-    console.log(total);
+    let productSelected = this.selectedProduct
+    console.log("clientSelected", clientSelected);
+    console.log("productSelected", productSelected);
+    
+    let precio = productSelected?.price;
+    let cantidad = (document.getElementById('clientCantidad') as HTMLInputElement).value;
+    let total = precio !== undefined ? precio * parseInt(cantidad) : 0;
+    let sell = {
+      client: clientSelected?.id,
+      total: total
+    }
+    console.log("sell", sell);
+    
+    this.sellService.createSell(sell).subscribe((result: any) => {
+      console.log("Sell created", result);
+      this.sells.push(result);
+      this.data3 = this.sells;
+      let sellDetail = {
+        sell: result.id,
+        product: productSelected?.id,
+        price: precio,
+        quantity: parseInt(cantidad),
+        total: total
+      }
+      this.sellDetailsService.createSellDetail(sellDetail).subscribe((result: any) => {
+        console.log("SellDetail created", result);
+        this.sellDetails.push(result);
+        this.data4 = this.sellDetails;
+        this.reloadTables();
+        (document.getElementById('clientCantidad') as HTMLInputElement).value = '';
+        this.selectedProduct = undefined;
+        this.selectedClient = undefined;
+        this.closeDialog();
+      });
+    });
+  }
+
+  addClient() {
+    let clientName = (document.getElementById('clientName') as HTMLInputElement).value;
+    let client = {
+      name: clientName
+    }
+    this.clientsService.createClient(client).subscribe((result: any) => {
+      console.log("Client created", result);
+      this.clients.push(result);
+      this.data1 = this.clients;
+      this.reloadTables();
+      (document.getElementById('clientName') as HTMLInputElement).value = '';
+      this.closeDialog();
+    });
   }
 
   closeDialog() {
       this.showAddProductBool = false;
       this.showAddSellBool = false;
+      this.showAddClientBool = false;
   }
 }

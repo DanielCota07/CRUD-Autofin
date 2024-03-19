@@ -16,6 +16,7 @@ export class SellDetailsService {
 
   createSellDetail(sellDetail: any) {
     console.log('SellDetail created', sellDetail);
+    return this.http.post(this.url, sellDetail);
   }
 
 }
