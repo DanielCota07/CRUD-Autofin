@@ -1,0 +1,16 @@
+<div class="card">
+    <p-table [columns]="dataHeaders" [value]="dataRows" tableTitle = "tableTitle" [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th *ngFor="let col of columns">{{ col }}</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData>
+            <tr>
+                <td *ngFor="let col of dataHeaders">
+                    {{ rowData[col.toLowerCase()] }}
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
