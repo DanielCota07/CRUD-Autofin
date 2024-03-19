@@ -1,16 +1,25 @@
-<div class="card">
-    <p-table [columns]="dataHeaders" [value]="dataRows" tableTitle = "tableTitle" styleClass="p-datatable-striped" [tableStyle]="{ 'min-width': '50rem' }">
-        <ng-template pTemplate="header" let-columns>
-            <tr>
-                <th *ngFor="let col of columns">{{ col }}</th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-rowData>
-            <tr>
-                <td *ngFor="let col of dataHeaders">
-                    {{ rowData[col.toLowerCase()] }}
-                </td>
-            </tr>
-        </ng-template>
-    </p-table>
-</div>
+<p-table class="custom-table" [columns]="dataHeaders" [value]="dataRows" tableTitle="tableTitle" styleClass="p-datatable-striped" [tableStyle]="{ 'min-width': '50rem' }">
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <ng-container *ngFor="let col of columns">
+                <th *ngIf="col !== 'Options'; else optionsHeader">{{ col }}</th>
+                <ng-template #optionsHeader>
+                    <th>Options</th>
+                </ng-template>
+            </ng-container>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData>
+        <tr>
+            <ng-container *ngFor="let col of dataHeaders">
+                <td *ngIf="col !== 'Options'; else optionsColumn">{{ rowData[col.toLowerCase()] }}</td>
+                <ng-template #optionsColumn>
+                    <td>
+                        <p-button  (click)="editRow(rowData)" icon="pi pi-pencil" severity="danger"></p-button>
+                        <p-button  (click)="deleteRow(rowData)" icon="pi pi-trash" severity="danger"></p-button>
+                    </td>
+                </ng-template>
+            </ng-container>
+        </tr>
+    </ng-template>
+</p-table>

@@ -6,7 +6,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ButtonModule } from 'primeng/button';
 import { TableComponent } from './components/table/table.component';
-
+import { HttpClientModule } from '@angular/common/http'
+import { CardModule } from 'primeng/card';
+import { PanelModule } from 'primeng/panel';
+import { DialogModule } from 'primeng/dialog';
+import { InputTextModule } from 'primeng/inputtext';
 
 @NgModule({
   declarations: [
@@ -17,7 +21,12 @@ import { TableComponent } from './components/table/table.component';
     AppRoutingModule,
     BrowserAnimationsModule,
     ButtonModule,
-    TableComponent
+    TableComponent, 
+    HttpClientModule,
+    CardModule,
+    PanelModule,
+    DialogModule,
+    InputTextModule
   ],
   providers: [],
   bootstrap: [AppComponent]

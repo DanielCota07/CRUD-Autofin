@@ -1,9 +1,56 @@
-<app-table tableTitle="Clientes" [dataHeaders]="headers1" [dataRows]="data1"></app-table>
-<br>
-<app-table tableTitle="Productos" [dataHeaders]="headers2" [dataRows]="data2"></app-table>
-<br>
-<app-table tableTitle="Ventas" [dataHeaders]="headers3" [dataRows]="data3"></app-table>
-<br>
-<app-table tableTitle="Ventas Detalladas" [dataHeaders]="headers4" [dataRows]="data4"></app-table>
-<br>
+<div class="container">
+    <h1 class="heading">Ventas Autofin</h1>
+    <div class="button-container">
+        <p-button (click)="showAddSell()" icon="pi pi-dollar" label="Nueva Venta"></p-button>
+        <p-button (click)="showAddProduct()" icon="pi pi-box" label="Nuevo Producto"></p-button>
+    </div>
+    <div class="panels-container">
+        <p-panel header="Clientes" [toggleable]="true" class="panel">
+            <app-table [dataHeaders]="headers1" [dataRows]="data1"></app-table>
+        </p-panel>
+        <p-panel header="Productos" [toggleable]="true" class="panel">
+            <app-table [dataHeaders]="headers2" [dataRows]="data2"></app-table>
+        </p-panel>
+        <p-panel header="Ventas" [toggleable]="true" class="panel">
+            <app-table [dataHeaders]="headers3" [dataRows]="data3"></app-table>
+        </p-panel>
+        <p-panel header="Detalles" [toggleable]="true" class="panel">
+            <app-table [dataHeaders]="headers4" [dataRows]="data4"></app-table>
+        </p-panel>
+    </div>
+</div>
+
+<p-dialog [(visible)]="showAddProductBool">
+    <div class="dialog-content">
+        <div class="form-group">
+            <label for="productName">Nombre del Producto:</label>
+            <input pInputText id="productName" class="input-field" type="text" pInputText />
+        </div>
+        <div class="form-group">
+            <label for="productPrice">Precio del Producto:</label>
+            <input id="productPrice" class="input-field" type="number" pInputText />
+        </div>
+        <div class="button-group">
+            <p-button (click)="addProduct()">Aceptar</p-button>
+            <p-button  (click)="closeDialog()">Cancelar</p-button>
+        </div>
+    </div>
+</p-dialog>
+
+<p-dialog [(visible)]="showAddSellBool">
+    <div class="dialog-content">
+        <div class="form-group">
+            <label for="productName">Cliente:</label>
+            <input pInputText id="productName" class="input-field" type="text" pInputText />
+        </div>
+        <div class="form-group">
+            <label for="productPrice">Total:</label>
+            <input id="productPrice" class="input-field" type="number" pInputText />
+        </div>
+        <div class="button-group">
+            <p-button (click)="addSell()">Aceptar</p-button>
+            <p-button  (click)="closeDialog()">Cancelar</p-button>
+        </div>
+    </div>
+</p-dialog>
 
