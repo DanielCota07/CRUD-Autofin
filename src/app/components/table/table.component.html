@@ -1,5 +1,5 @@
 <div class="card">
-    <p-table [columns]="dataHeaders" [value]="dataRows" tableTitle = "tableTitle" [tableStyle]="{ 'min-width': '50rem' }">
+    <p-table [columns]="dataHeaders" [value]="dataRows" tableTitle = "tableTitle" styleClass="p-datatable-striped" [tableStyle]="{ 'min-width': '50rem' }">
         <ng-template pTemplate="header" let-columns>
             <tr>
                 <th *ngFor="let col of columns">{{ col }}</th>
