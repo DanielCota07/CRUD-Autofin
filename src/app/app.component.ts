@@ -6,6 +6,10 @@ import { SellService } from './services/sell.service';
 import { SellDetailsService } from './services/sellDetails.service';
 
 
+interface ClientInterface {
+  id: number;
+  name: string;
+}
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -18,6 +22,18 @@ export class AppComponent {
   sells: Sell[] = [];
   sellDetails: SellDetail[] = [];
 
+  headers1: string[] = ['ID', 'Name'];
+  data1: any[] = [];
+  headers2: string[] = ['ID', 'Name', 'Price', 'Options'];
+  data2: any[] = [];
+  headers3: string[] = ['ID', 'ClientId', 'Total'];
+  data3: any[] = [];
+  headers4: string[] = ['ID', 'SellId', 'ProductId', 'Price', 'Quantity', 'Total'];
+  data4: any[] = [];
+
+  clientsList: ClientInterface[] | undefined;
+  selectedClient: ClientInterface | undefined;
+
   constructor(
     private productsService: ProductsService, 
     private clientsService: ClientsService, 
@@ -29,51 +45,27 @@ export class AppComponent {
     this.productsService.getProducts().subscribe((result: any) => {
       this.products = result;
       console.log("Products", this.products);
+      this.data2 = this.products;
     });
     this.clientsService.getClients().subscribe((result: any) => {
       this.clients = result;
       console.log("Clients", this.clients);
+      this.data1 = this.clients;
+      this.clientsList = this.clients.map((client) => {
+        return { id: client.id, name: client.name };
+      });
     });
     this.sellService.getSells().subscribe((result: any) => {
       this.sells = result;
       console.log("Sells", this.sells);
+      this.data3 = this.sells;
     });
     this.sellDetailsService.getSellDetails().subscribe((result: any) => {
       this.sellDetails = result;
       console.log("SellDetails", this.sellDetails);
+      this.data4 = this.sellDetails;
     });
-
   }
-
-  headers1: string[] = ['ID', 'Name'];
-  data1: any[] = [
-    { id: '1', name: 'Daniel'},
-    { id: '2', name: 'Wong'},
-    { id: '3', name: 'Lopez'},
-  ];
-
-  headers2: string[] = ['ID', 'Name', 'Price', 'Options'];
-  data2: any[] = [
-    { id: '1', name: 'Product 1', price: 100},
-    { id: '2', name: 'Product 2', price: 200},
-    { id: '3', name: 'Product 3', price: 300},
-    { id: '4', name: 'Product 4', price: 400},
-  ];
-
-  headers3: string[] = ['ID', 'ClientId', 'Total'];
-  data3: any[] = [
-    { id: '1', clientid: 1, total: 1000},
-    { id: '2', clientid: 2, total: 2000},
-    { id: '3', clientid: 3, total: 3000},
-  ];
-
-  headers4: string[] = ['ID', 'SellId', 'ProductId', 'Price', 'Quantity', 'Total'];
-  data4: any[] = [
-    { id: '1', sellid: 1, productid: 1, price: 100, quantity: 10, total: 1000},
-    { id: '2', sellid: 2, productid: 2, price: 200, quantity: 20, total: 2000},
-    { id: '3', sellid: 3, productid: 3, price: 300, quantity: 30, total: 3000},
-    { id: '4', sellid: 4, productid: 4, price: 400, quantity: 40, total: 4000},
-  ];
 
 
   showAddProductBool: boolean = false;
@@ -95,9 +87,9 @@ export class AppComponent {
   }
 
   addSell() {
-    let clientId = (document.getElementById('clientId') as HTMLInputElement).value;
-    let total = (document.getElementById('total') as HTMLInputElement).value;
-    console.log(clientId);
+    let clientSelected = this.selectedClient
+    let total = (document.getElementById('clientTotal') as HTMLInputElement).value;
+    console.log(clientSelected);
     console.log(total);
   }
 

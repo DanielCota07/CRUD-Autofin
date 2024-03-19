@@ -40,12 +40,12 @@
 <p-dialog [(visible)]="showAddSellBool">
     <div class="dialog-content">
         <div class="form-group">
-            <label for="productName">Cliente:</label>
-            <input pInputText id="productName" class="input-field" type="text" pInputText />
+            <label for="clientName">Cliente:</label>
+            <p-dropdown [options]="clientsList" [(ngModel)]="selectedClient" optionLabel="name" [showClear]="true" placeholder="Selecciona al cliente"></p-dropdown>
         </div>
         <div class="form-group">
             <label for="productPrice">Total:</label>
-            <input id="productPrice" class="input-field" type="number" pInputText />
+            <input id="clientTotal" class="input-field" type="number" pInputText />
         </div>
         <div class="button-group">
             <p-button (click)="addSell()">Aceptar</p-button>
