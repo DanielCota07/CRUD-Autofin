@@ -4,6 +4,7 @@ import { ProductsService } from './services/products.service';
 import { ClientsService } from './services/clients.service';
 import { SellService } from './services/sell.service';
 import { SellDetailsService } from './services/sellDetails.service';
+import Swal from 'sweetalert2'
 
 
 interface ClientInterface {
@@ -140,13 +141,76 @@ export class AppComponent {
       name: productName,
       price: productPrice
     }
+    if (productName === '' || productPriceString === '') {
+      Swal.fire({
+        icon: "error",
+        title: "Por favor llena todos los campos",
+        showConfirmButton: false,
+        timer: 1500
+      })
+      this.closeDialog();
+      (document.getElementById('productName') as HTMLInputElement).value = '';
+      (document.getElementById('productPrice') as HTMLInputElement).value = '';
+      return;
+    }
+    if(productPrice < 0){
+      Swal.fire({
+        icon: "error",
+        title: "El precio no puede ser negativo",
+        showConfirmButton: false,
+        timer: 1500
+      })
+      this.closeDialog();
+      (document.getElementById('productName') as HTMLInputElement).value = '';
+      (document.getElementById('productPrice') as HTMLInputElement).value = '';
+      return;
+    }
+    if(productName.length > 30){
+      Swal.fire({
+        icon: "error",
+        title: "El nombre no puede tener más de 30 caracteres",
+        showConfirmButton: false,
+        timer: 1500
+      })
+      this.closeDialog();
+      (document.getElementById('productName') as HTMLInputElement).value = '';
+      (document.getElementById('productPrice') as HTMLInputElement).value = '';
+      return;
+    }
+    if(productName.trim().length === 0){
+      Swal.fire({
+        icon: "error",
+        title: "El nombre no puede ser solo espacios",
+        showConfirmButton: false,
+        timer: 1500
+      })
+      this.closeDialog();
+      (document.getElementById('productName') as HTMLInputElement).value = '';
+      (document.getElementById('productPrice') as HTMLInputElement).value = '';
+      return;
+    }
     this.productsService.createProduct(product).subscribe((result: any) => {
-      console.log("Product created", result);
+      console.log("Product created2", result);
       this.products.push(result);
       this.data2 = this.products;
       this.reloadTables();
       (document.getElementById('productName') as HTMLInputElement).value = '';
       (document.getElementById('productPrice') as HTMLInputElement).value = '';
+      this.closeDialog();
+      Swal.fire({
+        icon: "success",
+        title: "Producto creado",
+        showConfirmButton: false,
+        timer: 1500
+      })
+    }, (error) => {
+      console.log("Error", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error al crear el producto",
+        showConfirmButton: false,
+        timer: 1500
+      })
       this.closeDialog();
     });
   }
@@ -154,9 +218,6 @@ export class AppComponent {
   addSell() {
     let clientSelected = this.selectedClient
     let productSelected = this.selectedProduct
-    console.log("clientSelected", clientSelected);
-    console.log("productSelected", productSelected);
-    
     let precio = productSelected?.price;
     let cantidad = (document.getElementById('clientCantidad') as HTMLInputElement).value;
     let total = precio !== undefined ? precio * parseInt(cantidad) : 0;
@@ -164,8 +225,71 @@ export class AppComponent {
       client: clientSelected?.id,
       total: total
     }
-    console.log("sell", sell);
-    
+    if(clientSelected === undefined ){
+      Swal.fire({
+        icon: "error",
+        title: "Por favor selecciona un cliente",
+        showConfirmButton: false,
+        timer: 1500
+      })
+      this.closeDialog();
+      (document.getElementById('clientCantidad') as HTMLInputElement).value = '';
+      this.selectedProduct = undefined;
+      this.selectedClient = undefined;
+      return;
+    }
+    if(productSelected === undefined){
+      Swal.fire({
+        icon: "error",
+        title: "Por favor selecciona un producto",
+        showConfirmButton: false,
+        timer: 1500
+      })
+      this.closeDialog();
+      (document.getElementById('clientCantidad') as HTMLInputElement).value = '';
+      this.selectedProduct = undefined;
+      this.selectedClient = undefined;
+      return;
+    }
+    if(cantidad === ''){
+      Swal.fire({
+        icon: "error",
+        title: "Por favor llena todos los campos",
+        showConfirmButton: false,
+        timer: 1500
+      })
+      this.closeDialog();
+      (document.getElementById('clientCantidad') as HTMLInputElement).value = '';
+      this.selectedProduct = undefined;
+      this.selectedClient = undefined;
+      return;
+    }
+    if(parseInt(cantidad) < 0){
+      Swal.fire({
+        icon: "error",
+        title: "La cantidad no puede ser negativa",
+        showConfirmButton: false,
+        timer: 1500
+      })
+      this.closeDialog();
+      (document.getElementById('clientCantidad') as HTMLInputElement).value = '';
+      this.selectedProduct = undefined;
+      this.selectedClient = undefined;
+      return;
+    }
+    if(parseInt(cantidad) === 0){
+      Swal.fire({
+        icon: "error",
+        title: "La cantidad no puede ser 0",
+        showConfirmButton: false,
+        timer: 1500
+      })
+      this.closeDialog();
+      (document.getElementById('clientCantidad') as HTMLInputElement).value = '';
+      this.selectedProduct = undefined;
+      this.selectedClient = undefined;
+      return;
+    }
     this.sellService.createSell(sell).subscribe((result: any) => {
       console.log("Sell created", result);
       this.sells.push(result);
@@ -186,6 +310,24 @@ export class AppComponent {
         this.selectedProduct = undefined;
         this.selectedClient = undefined;
         this.closeDialog();
+        Swal.fire({
+          icon: "success",
+          title: "Venta registrada",
+          showConfirmButton: false,
+          timer: 1500
+        })
+      }, (error) => {
+        console.log("Error", error);
+        Swal.fire({
+          icon: "error",
+          title: "Error al registrar la venta",
+          showConfirmButton: false,
+          timer: 1500
+        })
+        this.closeDialog();
+        (document.getElementById('clientCantidad') as HTMLInputElement).value = '';
+        this.selectedProduct = undefined;
+        this.selectedClient = undefined;
       });
     });
   }
@@ -195,6 +337,39 @@ export class AppComponent {
     let client = {
       name: clientName
     }
+    if (clientName === '') {
+      Swal.fire({
+        icon: "error",
+        title: "Por favor llena el campo",
+        showConfirmButton: false,
+        timer: 1500
+      })
+      this.closeDialog();
+      (document.getElementById('clientName') as HTMLInputElement).value = '';
+      return;
+    }
+    if(clientName.length > 30){
+      Swal.fire({
+        icon: "error",
+        title: "El nombre no puede tener más de 30 caracteres",
+        showConfirmButton: false,
+        timer: 1500
+      })
+      this.closeDialog();
+      (document.getElementById('clientName') as HTMLInputElement).value = '';
+      return;
+    }
+    if(clientName.trim().length === 0){
+      Swal.fire({
+        icon: "error",
+        title: "El nombre no puede ser solo espacios",
+        showConfirmButton: false,
+        timer: 1500
+      })
+      this.closeDialog();
+      (document.getElementById('clientName') as HTMLInputElement).value = '';
+      return;
+    }
     this.clientsService.createClient(client).subscribe((result: any) => {
       console.log("Client created", result);
       this.clients.push(result);
@@ -202,6 +377,22 @@ export class AppComponent {
       this.reloadTables();
       (document.getElementById('clientName') as HTMLInputElement).value = '';
       this.closeDialog();
+      Swal.fire({
+        icon: "success",
+        title: "Cliente creado",
+        showConfirmButton: false,
+        timer: 1500
+      })
+    }, (error) => {
+      console.log("Error", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error al crear el cliente",
+        showConfirmButton: false,
+        timer: 1500
+      })
+      this.closeDialog();
+      (document.getElementById('clientName') as HTMLInputElement).value = '';
     });
   }
 
@@ -215,9 +406,64 @@ export class AppComponent {
       name: productName,
       price: productPrice
     }
+    if (productName === '' || productPriceString === '') {
+      Swal.fire({
+        icon: "error",
+        title: "Por favor llena todos los campos",
+        showConfirmButton: false,
+        timer: 1500
+      })
+      this.closeDialog();
+      return;
+    }
+    if(productPrice < 0){
+      Swal.fire({
+        icon: "error",
+        title: "El precio no puede ser negativo",
+        showConfirmButton: false,
+        timer: 1500
+      })
+      this.closeDialog();
+      return;
+    }
+    if(productName.length > 30){
+      Swal.fire({
+        icon: "error",
+        title: "El nombre no puede tener más de 30 caracteres",
+        showConfirmButton: false,
+        timer: 1500
+      })
+      this.closeDialog();
+      return;
+    }
+    if(productName.trim().length === 0){
+      Swal.fire({
+        icon: "error",
+        title: "El nombre no puede ser solo espacios",
+        showConfirmButton: false,
+        timer: 1500
+      })
+      this.closeDialog();
+      return;
+    }
     this.productsService.updateProduct(product).subscribe((result: any) => {
       console.log("Product updated", result);
       this.reloadTables();
+      this.closeDialog();
+      Swal.fire({
+        icon: "success",
+        title: "Producto actualizado",
+        showConfirmButton: false,
+        timer: 1500
+      })
+    } , (error) => {
+      console.log("Error", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error al actualizar el producto",
+        showConfirmButton: false,
+        timer: 1500
+      })
       this.closeDialog();
     });
   }
@@ -229,6 +475,21 @@ export class AppComponent {
       this.productsService.deleteProduct(product.id).subscribe((result: any) => {
         console.log("Product deleted", result);
         this.reloadTables();
+        this.closeDialog();
+        Swal.fire({
+          icon: "success",
+          title: "Producto eliminado",
+          showConfirmButton: false,
+          timer: 1500
+        })
+      } , (error) => {
+        console.log("Error", error);
+        Swal.fire({
+          icon: "error",
+          title: "Error al eliminar el producto",
+          showConfirmButton: false,
+          timer: 1500
+        })
         this.closeDialog();
       });
     }
@@ -248,7 +509,6 @@ export class AppComponent {
     this.editProductName = event.name;
     this.editProductPrice = event.price;
 }
-
 
   onEliminarclick(event: any) {
       console.log('Eliminar fila:', event);
