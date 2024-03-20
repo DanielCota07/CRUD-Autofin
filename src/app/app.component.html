@@ -1,27 +1,42 @@
 <div class="container">
     <h1 class="heading">Ventas Autofin</h1>
+  
     <div class="button-container">
-        <p-button (click)="showAddSell()" icon="pi pi-dollar" label="Nueva Venta"></p-button>
-        <p-button (click)="showAddProduct()" icon="pi pi-box" label="Nuevo Producto"></p-button>
-        <p-button (click)="showAddClient()" icon="pi pi-user" label="Nuevo Cliente"></p-button>
+      <p-button label="Nueva Venta" icon="pi pi-dollar" (click)="showAddSell()"></p-button>
+      <p-button label="Nuevo Producto" icon="pi pi-box" (click)="showAddProduct()"></p-button>
+      <p-button label="Nuevo Cliente" icon="pi pi-user" (click)="showAddClient()"></p-button>
     </div>
+  
     <div class="panels-container">
-        <p-panel header="Clientes" [toggleable]="true" class="panel">
-            <app-table [dataHeaders]="headers1" [dataRows]="data1"></app-table>
-        </p-panel>
-        <p-panel header="Productos" [toggleable]="true" class="panel">
-            <app-table [dataHeaders]="headers2" [dataRows]="data2"></app-table>
-        </p-panel>
-        <p-panel header="Ventas" [toggleable]="true" class="panel">
-            <app-table [dataHeaders]="headers3" [dataRows]="data3"></app-table>
-        </p-panel>
-        <p-panel header="Detalles" [toggleable]="true" class="panel">
-            <app-table [dataHeaders]="headers4" [dataRows]="data4"></app-table>
-        </p-panel>
+      <p-panel header="Clientes" [toggleable]="true">
+        <app-table [dataHeaders]="headers1" [dataRows]="data1"></app-table>
+      </p-panel>
+      <br>
+      <p-panel header="Productos" [toggleable]="true">
+        <app-table [dataHeaders]="headers2" [dataRows]="data2" (editarClick)="onEditarclick($event)" (deleteClick)="onEliminarclick($event)"></app-table>
+      </p-panel>
+      <br>
+      <p-panel header="Ventas" [toggleable]="true">
+        <app-table [dataHeaders]="headers3" [dataRows]="data3"></app-table>
+      </p-panel>
+      <br>
+      <p-panel header="Detalles" [toggleable]="true">
+        <app-table [dataHeaders]="headers4" [dataRows]="data4"></app-table>
+      </p-panel>
+      <br>
     </div>
-</div>
-
-<p-dialog [(visible)]="showAddProductBool">
+  
+    <p-dialog [(visible)]="showAddProductBool">
+      </p-dialog>
+  
+    <p-dialog [(visible)]="showAddSellBool">
+      </p-dialog>
+  
+    <p-dialog [(visible)]="showAddClientBool">
+      </p-dialog>
+  </div>
+  
+<p-dialog [(visible)]="showAddProductBool" header="Agregar Producto">
     <div class="dialog-content">
         <div class="form-group">
             <label for="productName">Nombre del Producto:</label>
@@ -38,7 +53,7 @@
     </div>
 </p-dialog>
 
-<p-dialog [(visible)]="showAddSellBool">
+<p-dialog [(visible)]="showAddSellBool" header="Registrar Venta">
     <div class="dialog-content">
         <div class="form-group">
             <label for="clientName">Cliente:</label>
@@ -59,7 +74,7 @@
     </div>
 </p-dialog>
 
-<p-dialog [(visible)]="showAddClientBool">
+<p-dialog [(visible)]="showAddClientBool" header="Agregar Cliente">
     <div class="dialog-content">
         <div class="form-group">
             <label for="clientName">Nombre del Cliente:</label>

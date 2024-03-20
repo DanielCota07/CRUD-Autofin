@@ -2,3 +2,11 @@
 @import "primeng/resources/themes/lara-light-blue/theme.css";
 @import "primeng/resources/primeng.css";
 @import "primeicons/primeicons.css";
+
+/*   background-color: #212529; /* Dark background color */
+
+body {
+  padding: 20px;
+  background-color: #212529; /* Dark background color */
+  color: #fff; /* Light text color for better contrast */
+}

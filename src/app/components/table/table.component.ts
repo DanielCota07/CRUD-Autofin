@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
@@ -16,11 +16,14 @@ export class TableComponent  {
   @Input() dataRows!: any[]; 
   @Input() tableTitle: string | undefined; 
 
+  @Output() editarClick = new EventEmitter<any>();
+  @Output() deleteClick = new EventEmitter<any>();
+
   editRow(rowData: any) {
-    console.log('Editar fila:', rowData);
+    this.editarClick.emit(rowData);
   }
 
   deleteRow(rowData: any) {
-    console.log('Eliminar fila:', rowData);
+    this.deleteClick.emit(rowData);
   }
 }

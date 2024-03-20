@@ -202,4 +202,12 @@ export class AppComponent {
       this.showAddSellBool = false;
       this.showAddClientBool = false;
   }
+
+  onEditarclick(event: any) {
+    console.log('Editar fila:', event);
+  }
+
+  onEliminarclick(event: any) {
+    console.log('Eliminar fila:', event);
+  }
 }
