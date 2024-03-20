@@ -87,3 +87,34 @@
     </div>
 </p-dialog>
 
+
+<p-dialog [(visible)]="showEditProductBool" header="Editar Producto">
+  <div class="dialog-content">
+    <div class="form-group" style="display: none;">
+      <label for="editProductId">ID del Producto:</label>
+      <input pInputText id="editProductId" class="input-field" type="text" [(ngModel)]="editProductId" />
+    </div>
+    <div class="form-group">
+      <label for="editProductName">Nombre del Producto:</label>
+      <input pInputText id="editProductName" class="input-field" type="text" [(ngModel)]="editProductName" />
+    </div>
+    <div class="form-group">
+        <label for="editProductPrice">Precio del Producto:</label>
+        <input id="editProductPrice" class="input-field" type="number" [(ngModel)]="editProductPrice" />
+    </div>
+    <div class="button-group">
+        <p-button (click)="editProduct()">Aceptar</p-button>
+        <p-button  (click)="closeDialog()">Cancelar</p-button>
+    </div>
+  </div>
+</p-dialog>
+
+<p-dialog [(visible)]="showDeleteProductBool" header="Eliminar Producto">
+  <div class="dialog-content">
+      <p>¿Estás seguro que deseas borrar el producto: "{{ productToDelete }}"?</p>
+      <div class="button-group">
+          <p-button (click)="deleteProduct()">Aceptar</p-button>
+          <p-button  (click)="closeDialog()">Cancelar</p-button>
+      </div>
+  </div>
+</p-dialog>

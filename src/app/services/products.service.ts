@@ -26,10 +26,14 @@ export class ProductsService {
 
   updateProduct(product: any) {
     console.log('Product updated', product);
+    console.log('this.url', this.url);
+    return this.http.put(this.url, product);
   }
 
   deleteProduct(id: number) {
     console.log('Product deleted', id);
+    console.log('this.url', this.url);
+    return this.http.delete(this.url + '/' + id);
   }
 
 }

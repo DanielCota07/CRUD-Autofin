@@ -41,9 +41,17 @@ export class AppComponent {
   selectedClient: ClientInterface | undefined;
   productsList: ProductInterface[] | undefined;
   selectedProduct: ProductInterface | undefined;
+
   showAddProductBool: boolean = false;
   showAddSellBool: boolean = false;
   showAddClientBool: boolean = false;
+  showEditProductBool: boolean = false;
+  showDeleteProductBool: boolean = false;
+
+  editProductId: number = 0;
+  editProductName: string = '';
+  editProductPrice: number = 0;
+  productToDelete: string = '';
 
   constructor(
     private productsService: ProductsService, 
@@ -197,17 +205,54 @@ export class AppComponent {
     });
   }
 
+  editProduct() {
+    let productId = (document.getElementById('editProductId') as HTMLInputElement).value;
+    let productName = (document.getElementById('editProductName') as HTMLInputElement).value;
+    let productPriceString = (document.getElementById('editProductPrice') as HTMLInputElement).value;
+    let productPrice = parseFloat(productPriceString);
+    let product = {
+      id: parseInt(productId),
+      name: productName,
+      price: productPrice
+    }
+    this.productsService.updateProduct(product).subscribe((result: any) => {
+      console.log("Product updated", result);
+      this.reloadTables();
+      this.closeDialog();
+    });
+  }
+
+  deleteProduct(){
+    let productToDelete = this.productToDelete;
+    let product = this.products.find((product) => product.name === productToDelete);
+    if (product !== undefined) {
+      this.productsService.deleteProduct(product.id).subscribe((result: any) => {
+        console.log("Product deleted", result);
+        this.reloadTables();
+        this.closeDialog();
+      });
+    }
+  }
+
   closeDialog() {
       this.showAddProductBool = false;
       this.showAddSellBool = false;
       this.showAddClientBool = false;
+      this.showEditProductBool = false;
+      this.showDeleteProductBool = false;
   }
 
   onEditarclick(event: any) {
-    console.log('Editar fila:', event);
-  }
+    this.showEditProductBool = true;
+    this.editProductId = event.id;
+    this.editProductName = event.name;
+    this.editProductPrice = event.price;
+}
+
 
   onEliminarclick(event: any) {
-    console.log('Eliminar fila:', event);
+      console.log('Eliminar fila:', event);
+      this.productToDelete = event.name;
+      this.showDeleteProductBool = true;
   }
 }
